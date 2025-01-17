@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questionnaire</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fluid {
+            background-color: rgb(0, 0, 0); /* Set the container background to black */
+            color: white; 
+            box-shadow: 0px 10px 8px 0px #888888;
+        }
+        .form-container {
+            color: rgb(167, 167, 167);
+            padding-left: 30px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .intro-container {
+            text-align: center;
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 30px;
+            color: rgb(167, 167, 167);
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        .row {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Column: Introduction -->
+            <div class="col-md-6 intro-container">
+                <h2>Thanks for Choosing EyePro &#x1F44D!</h2>
+                <br>
+                <h4>
+                    Please fillout the New Registration form followed by the questionnaire section to start your test for a detailed result.
+                </h4>
+                <br>
+                <p>
+                    If you have any questions or need assistance, feel free to ask our staff. 
+                    We are here to help you.
+                </p>
+                <p>
+                    After completing the registration, kindly proceed to the questionnaire section 
+                    to provide additional information.
+                </p>
+                <br>
+                <br>
+                <br>
+                <h5 style="color: rgba(255, 0, 0, 0.731);">⚠️NOTE: EVERY QUESTION IS MANDATORY AND USED FOR ANALYSIS AND DIAGNOSIS SO BE 
+                    CAREFUL WHILE ANSWERING EACH AND EVERY QUESTION.</h5>
+            </div>
+
+            <!-- Right Column: Form -->
+            <div class="col-md-6 form-container">
+                <h2 class="text-center">New Patient Registration</h2>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Your name">
+                <br>
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" placeholder="Your age">
+                <br>
+                <label for="gender" class="form-label">Gender</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" value="male" id="male">
+                    <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" value="female" id="female">
+                    <label class="form-check-label" for="female">Female</label>
+                </div>
+                <br>
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                <br>
+                <label for="doctor" class="form-label">Doctor Name</label>
+                <input type="text" class="form-control" id="doctor" placeholder="Doctor name">
+                <br>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submitFormBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#submitFormBtn').click(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get the form data
+                var name = $('#name').val();
+                var age = $('#age').val();
+                var gender = $("input[name='gender']:checked").val();
+                var email = $('#email').val();
+                var doctor = $('#doctor').val();
+
+                // Perform validation
+                if (!name || !age || !gender || !email || !doctor) {
+                    alert('Please fill all fields');
+                    return;
+                }
+
+                // Send data to Flask server
+                $.ajax({
+                    url: 'http://192.168.1.2:5000/register',  // Flask server URL
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        name: name,
+                        age: age,
+                        gender: gender,
+                        email: email,
+                        doctor: doctor
+                    }),
+                    success: function(response) {
+                        console.log('Registration success:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error details:', xhr, status, error);
+                        alert('Error occurred while submitting the form: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
